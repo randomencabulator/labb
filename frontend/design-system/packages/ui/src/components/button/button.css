@@ -1,0 +1,48 @@
+/* Buttons */
+.lb-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lb-space-3);
+  font: inherit;
+  font-size: var(--lb-text-base);
+  color: var(--lb-sys-color-text);
+  background: transparent;
+  border: var(--lb-border-thin) solid var(--lb-sys-color-border);
+  border-radius: var(--lb-radius-md);
+  padding: var(--lb-space-3) var(--lb-space-6);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.lb-button:hover:not(:disabled) { border-color: var(--lb-sys-color-muted); }
+.lb-button:disabled { opacity: .5; cursor: default; }
+.lb-button:focus-visible { outline: var(--lb-border-focus) solid var(--lb-sys-color-accent); outline-offset: 2px; }
+.lb-button.sm { font-size: var(--lb-text-sm); padding: var(--lb-space-2) var(--lb-space-5); }
+.lb-button.lg { padding: 9px var(--lb-space-8); }
+.lb-button.primary {
+  background: var(--lb-sys-color-accent-fill);
+  border-color: var(--lb-sys-color-accent-fill);
+  color: var(--lb-sys-color-on-accent);
+  font-weight: var(--lb-weight-bold);
+  box-shadow: var(--lb-shadow-press);
+  transition: transform var(--lb-motion-press), box-shadow var(--lb-motion-press);
+}
+.lb-button.primary:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: var(--lb-shadow-press-hover); }
+.lb-button.primary:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--lb-sys-color-press); }
+.lb-button.danger:hover:not(:disabled) { color: var(--lb-sys-color-error); border-color: var(--lb-sys-color-error); }
+.lb-button.ghost { border-color: transparent; color: var(--lb-sys-color-muted); }
+.lb-button.ghost:hover:not(:disabled) { background: var(--lb-sys-color-active); color: var(--lb-sys-color-text); border-color: transparent; }
+.lb-button.icon { padding: var(--lb-space-3); }
+.lb-button.link {
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-color: var(--lb-sys-color-border);
+  text-underline-offset: 3px;
+}
+.lb-button.link:hover:not(:disabled) { text-decoration-color: var(--lb-sys-color-accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-button.primary { transition: none; }
+  .lb-button.primary:hover:not(:disabled) { transform: none; }
+}

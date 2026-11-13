@@ -1,0 +1,2 @@
+/* Mono labels over sections */
+.lb-label { font: var(--lb-weight-bold) var(--lb-text-2xs) var(--lb-font-mono); letter-spacing: var(--lb-tracking-label); text-transform: uppercase; color: var(--lb-sys-color-muted); }

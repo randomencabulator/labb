@@ -1,0 +1,25 @@
+/* Toggle chips (the Web toggle next to the pickers) */
+.lb-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lb-space-3);
+  height: 34px;
+  padding: 0 var(--lb-space-6) 0 var(--lb-space-5);
+  font: inherit;
+  font-size: var(--lb-text-sm);
+  font-weight: var(--lb-weight-medium);
+  color: var(--lb-sys-color-muted);
+  background: none;
+  border: var(--lb-border-thin) solid transparent;
+  border-radius: var(--lb-radius-md);
+  cursor: pointer;
+}
+.lb-toggle:hover { background: var(--lb-sys-color-active); color: var(--lb-sys-color-text); }
+.lb-toggle[data-pressed] {
+  color: var(--lb-sys-color-accent);
+  border-color: var(--lb-sys-color-accent-fill);
+  background: color-mix(in srgb, var(--lb-sys-color-accent-fill) 10%, transparent);
+}
+.lb-toggle[data-pressed]:hover { background: color-mix(in srgb, var(--lb-sys-color-accent-fill) 16%, transparent); }
+.lb-toggle[data-disabled] { opacity: .5; cursor: default; }
+.lb-toggle:focus-visible { outline: var(--lb-border-focus) solid var(--lb-sys-color-accent); outline-offset: 2px; }

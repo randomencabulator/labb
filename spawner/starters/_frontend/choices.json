@@ -1,0 +1,33 @@
+[
+  {
+    "name": "color",
+    "title": "Colours",
+    "options": [
+      {"name": "neutral", "title": "Neutral", "description": "Black, white and greys", "swatch": "oklch(0.205 0 0)"},
+      {"name": "blue", "title": "Blue", "description": "Calm and familiar", "swatch": "oklch(54.6% 0.245 262.881)"},
+      {"name": "emerald", "title": "Emerald", "description": "Fresh green", "swatch": "oklch(59.6% 0.145 163.225)"},
+      {"name": "violet", "title": "Violet", "description": "Bold purple", "swatch": "oklch(54.1% 0.281 293.009)"},
+      {"name": "amber", "title": "Amber", "description": "Warm yellow, with dark text on it", "swatch": "oklch(76.9% 0.188 70.08)"}
+    ]
+  },
+  {
+    "name": "style",
+    "title": "Spacing and shadows",
+    "options": [
+      {"name": "compact", "title": "Compact and flat", "description": "Dense, small corners, almost no shadows"},
+      {"name": "balanced", "title": "Balanced and soft", "description": "shadcn's usual spacing, corners and soft shadows", "default": true},
+      {"name": "roomy", "title": "Roomy and raised", "description": "More space, round corners, deeper shadows"}
+    ]
+  },
+  {
+    "name": "font",
+    "title": "Font",
+    "options": [
+      {"name": "geist", "title": "Geist", "description": "Clean and modern"},
+      {"name": "inter", "title": "Inter", "description": "Neutral and very readable"},
+      {"name": "jakarta", "title": "Plus Jakarta Sans", "description": "Friendly and rounded"},
+      {"name": "lora", "title": "Lora", "description": "A serif, for reading"},
+      {"name": "mono", "title": "JetBrains Mono", "description": "Monospaced, technical"}
+    ]
+  }
+]

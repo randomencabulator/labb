@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@import "@xyflow/react/dist/style.css";
+
+/* The page's colours, light and dark (it follows the system). Use them through Tailwind:
+   bg-background, text-foreground, bg-card, text-muted-foreground, border-border, bg-primary,
+   text-primary-foreground, bg-accent, text-destructive, and the charts' chart-1 … chart-6.
+   Change the look here, not with literal colours in the components. */
+:root {
+  --background: oklch(0.99 0.004 85);
+  --foreground: oklch(0.2 0.01 85);
+  --card: oklch(1 0 0);
+  --muted: oklch(0.96 0.006 85);
+  --muted-foreground: oklch(0.5 0.012 85);
+  --border: oklch(0.91 0.008 85);
+  --primary: oklch(0.55 0.16 262);
+  --primary-foreground: oklch(0.99 0 0);
+  --accent: oklch(0.95 0.02 262);
+  --accent-foreground: oklch(0.35 0.12 262);
+  --destructive: oklch(0.58 0.2 27);
+  --success: oklch(0.6 0.15 150);
+  --warning: oklch(0.75 0.15 75);
+  --ring: oklch(0.55 0.16 262 / 0.45);
+  --chart-1: oklch(0.58 0.16 262);
+  --chart-2: oklch(0.68 0.14 165);
+  --chart-3: oklch(0.75 0.15 75);
+  --chart-4: oklch(0.62 0.19 25);
+  --chart-5: oklch(0.6 0.17 310);
+  --chart-6: oklch(0.65 0.1 220);
+  color-scheme: light;
+}
+
+/* Dark: the system's, unless the page was opened with ?theme=light; or ?theme=dark (data-theme,
+   set by app/layout.tsx), whatever the system says */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: oklch(0.17 0.008 85);
+    --foreground: oklch(0.95 0.006 85);
+    --card: oklch(0.21 0.008 85);
+    --muted: oklch(0.25 0.008 85);
+    --muted-foreground: oklch(0.7 0.01 85);
+    --border: oklch(0.3 0.008 85);
+    --primary: oklch(0.7 0.14 262);
+    --primary-foreground: oklch(0.17 0.02 262);
+    --accent: oklch(0.28 0.05 262);
+    --accent-foreground: oklch(0.88 0.06 262);
+    --destructive: oklch(0.68 0.19 27);
+    --success: oklch(0.72 0.15 150);
+    --warning: oklch(0.8 0.14 75);
+    --ring: oklch(0.7 0.14 262 / 0.5);
+    --chart-1: oklch(0.7 0.14 262);
+    --chart-2: oklch(0.75 0.13 165);
+    --chart-3: oklch(0.8 0.14 75);
+    --chart-4: oklch(0.7 0.17 25);
+    --chart-5: oklch(0.72 0.15 310);
+    --chart-6: oklch(0.74 0.1 220);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --background: oklch(0.17 0.008 85);
+  --foreground: oklch(0.95 0.006 85);
+  --card: oklch(0.21 0.008 85);
+  --muted: oklch(0.25 0.008 85);
+  --muted-foreground: oklch(0.7 0.01 85);
+  --border: oklch(0.3 0.008 85);
+  --primary: oklch(0.7 0.14 262);
+  --primary-foreground: oklch(0.17 0.02 262);
+  --accent: oklch(0.28 0.05 262);
+  --accent-foreground: oklch(0.88 0.06 262);
+  --destructive: oklch(0.68 0.19 27);
+  --success: oklch(0.72 0.15 150);
+  --warning: oklch(0.8 0.14 75);
+  --ring: oklch(0.7 0.14 262 / 0.5);
+  --chart-1: oklch(0.7 0.14 262);
+  --chart-2: oklch(0.75 0.13 165);
+  --chart-3: oklch(0.8 0.14 75);
+  --chart-4: oklch(0.7 0.17 25);
+  --chart-5: oklch(0.72 0.15 310);
+  --chart-6: oklch(0.74 0.1 220);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+}

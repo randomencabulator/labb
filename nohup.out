@@ -1,0 +1,2 @@
+
+(nm-applet:26499): GLib-GIO-WARNING **: 10:59:02.639: unable to send notifications through org.freedesktop.Notifications: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable

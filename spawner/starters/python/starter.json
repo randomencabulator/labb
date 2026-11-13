@@ -1,0 +1,1 @@
+{"title": "React and Python", "description": "A React page with shadcn/ui, and a FastAPI server for its API, with a database", "order": 2, "frontend": true}

@@ -1,0 +1,101 @@
+# Tests and checks on every pull request and on main. See docs/improvement-plan/03-reliability-and-ops.md (OPS-01).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: labb (SQLite)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+      - run: uv sync --all-groups --frozen
+      - run: uv run ruff check . crawler sandbox spawner browser sites
+      - run: uv run pytest -q
+
+  python-postgres:
+    name: labb (Postgres)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg18-trixie
+        env:
+          POSTGRES_USER: labb
+          POSTGRES_PASSWORD: labb
+          POSTGRES_DB: labb_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U labb -d labb_test" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql://labb:labb@localhost:5432/labb_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+      - run: uv sync --all-groups --frozen
+      - run: uv run pytest -q
+
+  services:
+    name: ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [crawler, sandbox, spawner, browser, sites]
+    defaults:
+      run:
+        working-directory: ${{ matrix.service }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+      - run: uv sync --frozen
+      - name: Chromium for Playwright
+        if: matrix.service == 'crawler' || matrix.service == 'browser'
+        run: uv run playwright install --with-deps chromium
+      - run: uv run pytest -q
+
+  frontend:
+    name: web app and design system
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # The design system's scripts are TypeScript run by Node itself
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run web:build
+      - run: npm audit --omit=dev --audit-level=high
+
+  images:
+    name: Docker images build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      # compose.yaml as releases ship it (published images), and with compose.dev.yaml building them
+      - run: docker compose config -q
+      - run: docker compose -f compose.yaml -f compose.dev.yaml config -q
+      - run: docker compose -f compose.yaml -f compose.dev.yaml build

@@ -1,0 +1,13 @@
+/* Tool calls: little tagged lines */
+.lb-tool-line {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lb-space-3);
+  padding: var(--lb-space-1) var(--lb-space-4);
+  font: var(--lb-text-sm) var(--lb-font-mono);
+  color: var(--lb-sys-color-muted);
+  background: var(--lb-sys-color-code-bg);
+  border: var(--lb-border-thin) solid var(--lb-sys-color-border);
+  border-radius: var(--lb-radius-sm);
+}
+.lb-tool-line b { color: var(--lb-sys-color-text); font-weight: var(--lb-weight-semibold); }

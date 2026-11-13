@@ -1,0 +1,3 @@
+/* Code */
+.lb-code { font: .9em/1.45 var(--lb-font-mono); background: var(--lb-sys-color-code-bg); padding: 1px 5px; border-radius: var(--lb-radius-xs); }
+.lb-kbd { font: var(--lb-text-xs) var(--lb-font-mono); border: var(--lb-border-thin) solid var(--lb-sys-color-border); border-bottom-width: 2px; border-radius: var(--lb-radius-sm); padding: 0 5px; }

@@ -1,0 +1,6 @@
+# The server's image is built from the app's folder, but has only backend/ and db/ in it: the page
+# is built and served apart
+frontend
+**/node_modules
+**/__pycache__
+**/*.pyc

@@ -1,0 +1,52 @@
+# An app's front. SERVER is its server on the apps' network (labb-app-<id>-server:8080), which may not
+# be there: an app with only a page has none.
+{
+	admin off
+	auto_https off
+	persist_config off
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+:8080 {
+	@api path /api /api/*
+	handle @api {
+		reverse_proxy {$SERVER} {
+			flush_interval -1
+		}
+	}
+
+	handle {
+		@page file {
+			root /srv/current
+			try_files /index.html
+		}
+		# The built page: its files, and index.html for any other path, so it can have addresses of its own
+		handle @page {
+			root * /srv/current
+			# Browsers check for a newer one each time, so a new build shows at once
+			header Cache-Control no-cache
+			try_files {path} /index.html
+			file_server
+		}
+		# No page (yet, or an app from before pages were built apart): its server answers everything
+		handle {
+			reverse_proxy {$SERVER} {
+				flush_interval -1
+			}
+		}
+	}
+
+	handle_errors 502 503 504 {
+		@api_error path /api /api/*
+		handle @api_error {
+			header Content-Type application/json
+			respond `{"detail": "The app's server isn't answering: it has none (no backend/), or it's starting, or it crashed (see its logs)"}` 502
+		}
+		handle {
+			header Content-Type "text/plain; charset=utf-8"
+			respond "This app has no page yet, and its server isn't answering." 502
+		}
+	}
+}

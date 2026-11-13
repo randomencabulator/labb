@@ -1,0 +1,16 @@
+/* Segmented control (the theme picker in the account menu), a Base UI toggle group */
+.lb-segmented { display: inline-flex; gap: var(--lb-space-1); padding: var(--lb-space-2); background: var(--lb-sys-color-bg); border-radius: var(--lb-radius-md); }
+.lb-segmented-item {
+  flex: 1;
+  font: inherit;
+  font-size: var(--lb-text-xs);
+  color: var(--lb-sys-color-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--lb-radius-md);
+  padding: var(--lb-space-2) var(--lb-space-4);
+  cursor: pointer;
+}
+.lb-segmented-item:hover { color: var(--lb-sys-color-text); }
+.lb-segmented-item[data-pressed] { background: var(--lb-sys-color-surface); color: var(--lb-sys-color-text); box-shadow: var(--lb-shadow-soft); }
+.lb-segmented-item:focus-visible { outline: var(--lb-border-focus) solid var(--lb-sys-color-accent); outline-offset: 0; }

@@ -1,0 +1,49 @@
+{
+  "version": "2025.10",
+  "name": "labb",
+  "description": "labb's tokens: the reference palette (ref), the base set, then the system colours (sys) for the theme picked (light by default).",
+  "sets": {
+    "ref": {
+      "sources": [
+        {
+          "$ref": "ref.json"
+        }
+      ]
+    },
+    "base": {
+      "sources": [
+        {
+          "$ref": "base.json"
+        }
+      ]
+    }
+  },
+  "modifiers": {
+    "theme": {
+      "contexts": {
+        "light": [
+          {
+            "$ref": "sys/light.json"
+          }
+        ],
+        "dark": [
+          {
+            "$ref": "sys/dark.json"
+          }
+        ]
+      },
+      "default": "light"
+    }
+  },
+  "resolutionOrder": [
+    {
+      "$ref": "#/sets/ref"
+    },
+    {
+      "$ref": "#/sets/base"
+    },
+    {
+      "$ref": "#/modifiers/theme"
+    }
+  ]
+}

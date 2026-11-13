@@ -1,0 +1,229 @@
+/* The app's look, as picked when it was made: index.html's <html> says which, with data-color
+   (neutral, blue, emerald, violet, amber), data-style (compact, balanced, roomy: spacing, corners and
+   shadows) and data-font (geist, inter, jakarta, lora, mono). Change one there to change the whole app.
+   Dark mode is the `dark` class, which index.html sets from the system. */
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/lora";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* Spacing, corners and shadows: the balanced ones unless another is picked. --spacing is Tailwind's
+   unit (p-4 is 4 of it), so it makes the whole app denser or roomier; --app-shade darkens the
+   shadows in dark mode. */
+:root {
+  --app-shade: 1;
+  --app-font: "Geist Variable", sans-serif;
+  --app-font-heading: var(--app-font);
+  --app-font-mono: "JetBrains Mono Variable", monospace;
+  --app-shadow-2xs: 0 1px rgb(0 0 0 / calc(0.05 * var(--app-shade)));
+  --app-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / calc(0.05 * var(--app-shade)));
+  --app-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / calc(0.1 * var(--app-shade))), 0 1px 2px -1px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+  --app-shadow-md: 0 4px 6px -1px rgb(0 0 0 / calc(0.1 * var(--app-shade))), 0 2px 4px -2px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+  --app-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / calc(0.1 * var(--app-shade))), 0 4px 6px -4px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+  --app-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / calc(0.1 * var(--app-shade))), 0 8px 10px -6px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+  --app-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / calc(0.25 * var(--app-shade)));
+}
+
+:root.dark {
+  --app-shade: 2.5;
+}
+
+:root[data-style="compact"] {
+  --spacing: 0.225rem;
+  --radius: 0.375rem;
+  --app-shadow-2xs: 0 0 #0000;
+  --app-shadow-xs: 0 0 #0000;
+  --app-shadow-sm: 0 0 #0000;
+  --app-shadow-md: 0 1px 2px rgb(0 0 0 / calc(0.06 * var(--app-shade)));
+  --app-shadow-lg: 0 2px 4px rgb(0 0 0 / calc(0.08 * var(--app-shade)));
+  --app-shadow-xl: 0 4px 8px rgb(0 0 0 / calc(0.08 * var(--app-shade)));
+  --app-shadow-2xl: 0 8px 16px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+}
+
+:root[data-style="balanced"] {
+  --spacing: 0.25rem;
+  --radius: 0.625rem;
+  --app-shadow-2xs: 0 1px rgb(0 0 0 / calc(0.05 * var(--app-shade)));
+  --app-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / calc(0.05 * var(--app-shade)));
+  --app-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / calc(0.1 * var(--app-shade))), 0 1px 2px -1px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+  --app-shadow-md: 0 4px 6px -1px rgb(0 0 0 / calc(0.1 * var(--app-shade))), 0 2px 4px -2px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+  --app-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / calc(0.1 * var(--app-shade))), 0 4px 6px -4px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+  --app-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / calc(0.1 * var(--app-shade))), 0 8px 10px -6px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+  --app-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / calc(0.25 * var(--app-shade)));
+}
+
+:root[data-style="roomy"] {
+  --spacing: 0.275rem;
+  --radius: 1rem;
+  --app-shadow-2xs: 0 1px 2px rgb(0 0 0 / calc(0.06 * var(--app-shade)));
+  --app-shadow-xs: 0 2px 4px rgb(0 0 0 / calc(0.07 * var(--app-shade)));
+  --app-shadow-sm: 0 2px 6px -1px rgb(0 0 0 / calc(0.1 * var(--app-shade))), 0 4px 12px -2px rgb(0 0 0 / calc(0.08 * var(--app-shade)));
+  --app-shadow-md: 0 6px 12px -2px rgb(0 0 0 / calc(0.12 * var(--app-shade))), 0 10px 24px -6px rgb(0 0 0 / calc(0.1 * var(--app-shade)));
+  --app-shadow-lg: 0 12px 24px -4px rgb(0 0 0 / calc(0.14 * var(--app-shade))), 0 20px 40px -10px rgb(0 0 0 / calc(0.12 * var(--app-shade)));
+  --app-shadow-xl: 0 20px 40px -8px rgb(0 0 0 / calc(0.16 * var(--app-shade))), 0 32px 64px -16px rgb(0 0 0 / calc(0.14 * var(--app-shade)));
+  --app-shadow-2xl: 0 32px 80px -16px rgb(0 0 0 / calc(0.3 * var(--app-shade)));
+}
+
+/* Fonts */
+:root[data-font="geist"] {
+  --app-font: "Geist Variable", sans-serif;
+}
+:root[data-font="inter"] {
+  --app-font: "Inter Variable", sans-serif;
+}
+:root[data-font="jakarta"] {
+  --app-font: "Plus Jakarta Sans Variable", sans-serif;
+}
+:root[data-font="lora"] {
+  --app-font: "Lora Variable", serif;
+}
+:root[data-font="mono"] {
+  --app-font: "JetBrains Mono Variable", monospace;
+}
+
+/* Colours: neutral is index.css's own; the others give it a colour, for light and dark */
+
+:root[data-color="blue"] {
+  --primary: oklch(54.6% 0.245 262.881);
+  --primary-foreground: oklch(97% 0.014 254.604);
+  --ring: oklch(70.7% 0.165 254.624);
+  --accent: oklch(97% 0.014 254.604);
+  --accent-foreground: oklch(42.4% 0.199 265.638);
+  --chart-1: oklch(80.9% 0.105 251.813);
+  --chart-2: oklch(62.3% 0.214 259.815);
+  --chart-3: oklch(54.6% 0.245 262.881);
+  --chart-4: oklch(48.8% 0.243 264.376);
+  --chart-5: oklch(42.4% 0.199 265.638);
+  --sidebar-primary: oklch(54.6% 0.245 262.881);
+  --sidebar-primary-foreground: oklch(97% 0.014 254.604);
+  --sidebar-accent: oklch(97% 0.014 254.604);
+  --sidebar-accent-foreground: oklch(42.4% 0.199 265.638);
+  --sidebar-ring: oklch(70.7% 0.165 254.624);
+}
+
+:root.dark[data-color="blue"] {
+  --primary: oklch(62.3% 0.214 259.815);
+  --primary-foreground: oklch(97% 0.014 254.604);
+  --ring: oklch(54.6% 0.245 262.881);
+  --accent: oklch(28.2% 0.091 267.935);
+  --accent-foreground: oklch(93.2% 0.032 255.585);
+  --chart-1: oklch(80.9% 0.105 251.813);
+  --chart-2: oklch(62.3% 0.214 259.815);
+  --chart-3: oklch(54.6% 0.245 262.881);
+  --chart-4: oklch(48.8% 0.243 264.376);
+  --chart-5: oklch(42.4% 0.199 265.638);
+  --sidebar-primary: oklch(62.3% 0.214 259.815);
+  --sidebar-primary-foreground: oklch(97% 0.014 254.604);
+  --sidebar-accent: oklch(28.2% 0.091 267.935);
+  --sidebar-accent-foreground: oklch(93.2% 0.032 255.585);
+  --sidebar-ring: oklch(54.6% 0.245 262.881);
+}
+
+:root[data-color="emerald"] {
+  --primary: oklch(59.6% 0.145 163.225);
+  --primary-foreground: oklch(97.9% 0.021 166.113);
+  --ring: oklch(76.5% 0.177 163.223);
+  --accent: oklch(97.9% 0.021 166.113);
+  --accent-foreground: oklch(43.2% 0.095 166.913);
+  --chart-1: oklch(84.5% 0.143 164.978);
+  --chart-2: oklch(69.6% 0.17 162.48);
+  --chart-3: oklch(59.6% 0.145 163.225);
+  --chart-4: oklch(50.8% 0.118 165.612);
+  --chart-5: oklch(43.2% 0.095 166.913);
+  --sidebar-primary: oklch(59.6% 0.145 163.225);
+  --sidebar-primary-foreground: oklch(97.9% 0.021 166.113);
+  --sidebar-accent: oklch(97.9% 0.021 166.113);
+  --sidebar-accent-foreground: oklch(43.2% 0.095 166.913);
+  --sidebar-ring: oklch(76.5% 0.177 163.223);
+}
+
+:root.dark[data-color="emerald"] {
+  --primary: oklch(69.6% 0.17 162.48);
+  --primary-foreground: oklch(97.9% 0.021 166.113);
+  --ring: oklch(59.6% 0.145 163.225);
+  --accent: oklch(26.2% 0.051 172.552);
+  --accent-foreground: oklch(95% 0.052 163.051);
+  --chart-1: oklch(84.5% 0.143 164.978);
+  --chart-2: oklch(69.6% 0.17 162.48);
+  --chart-3: oklch(59.6% 0.145 163.225);
+  --chart-4: oklch(50.8% 0.118 165.612);
+  --chart-5: oklch(43.2% 0.095 166.913);
+  --sidebar-primary: oklch(69.6% 0.17 162.48);
+  --sidebar-primary-foreground: oklch(97.9% 0.021 166.113);
+  --sidebar-accent: oklch(26.2% 0.051 172.552);
+  --sidebar-accent-foreground: oklch(95% 0.052 163.051);
+  --sidebar-ring: oklch(59.6% 0.145 163.225);
+}
+
+:root[data-color="violet"] {
+  --primary: oklch(54.1% 0.281 293.009);
+  --primary-foreground: oklch(96.9% 0.016 293.756);
+  --ring: oklch(70.2% 0.183 293.541);
+  --accent: oklch(96.9% 0.016 293.756);
+  --accent-foreground: oklch(43.2% 0.232 292.759);
+  --chart-1: oklch(81.1% 0.111 293.571);
+  --chart-2: oklch(60.6% 0.25 292.717);
+  --chart-3: oklch(54.1% 0.281 293.009);
+  --chart-4: oklch(49.1% 0.27 292.581);
+  --chart-5: oklch(43.2% 0.232 292.759);
+  --sidebar-primary: oklch(54.1% 0.281 293.009);
+  --sidebar-primary-foreground: oklch(96.9% 0.016 293.756);
+  --sidebar-accent: oklch(96.9% 0.016 293.756);
+  --sidebar-accent-foreground: oklch(43.2% 0.232 292.759);
+  --sidebar-ring: oklch(70.2% 0.183 293.541);
+}
+
+:root.dark[data-color="violet"] {
+  --primary: oklch(60.6% 0.25 292.717);
+  --primary-foreground: oklch(96.9% 0.016 293.756);
+  --ring: oklch(54.1% 0.281 293.009);
+  --accent: oklch(28.3% 0.141 291.089);
+  --accent-foreground: oklch(94.3% 0.029 294.588);
+  --chart-1: oklch(81.1% 0.111 293.571);
+  --chart-2: oklch(60.6% 0.25 292.717);
+  --chart-3: oklch(54.1% 0.281 293.009);
+  --chart-4: oklch(49.1% 0.27 292.581);
+  --chart-5: oklch(43.2% 0.232 292.759);
+  --sidebar-primary: oklch(60.6% 0.25 292.717);
+  --sidebar-primary-foreground: oklch(96.9% 0.016 293.756);
+  --sidebar-accent: oklch(28.3% 0.141 291.089);
+  --sidebar-accent-foreground: oklch(94.3% 0.029 294.588);
+  --sidebar-ring: oklch(54.1% 0.281 293.009);
+}
+
+:root[data-color="amber"] {
+  --primary: oklch(76.9% 0.188 70.08);
+  --primary-foreground: oklch(27.9% 0.077 45.635);
+  --ring: oklch(87.9% 0.169 91.605);
+  --accent: oklch(98.7% 0.022 95.277);
+  --accent-foreground: oklch(47.3% 0.137 46.201);
+  --chart-1: oklch(87.9% 0.169 91.605);
+  --chart-2: oklch(76.9% 0.188 70.08);
+  --chart-3: oklch(66.6% 0.179 58.318);
+  --chart-4: oklch(55.5% 0.163 48.998);
+  --chart-5: oklch(47.3% 0.137 46.201);
+  --sidebar-primary: oklch(76.9% 0.188 70.08);
+  --sidebar-primary-foreground: oklch(27.9% 0.077 45.635);
+  --sidebar-accent: oklch(98.7% 0.022 95.277);
+  --sidebar-accent-foreground: oklch(47.3% 0.137 46.201);
+  --sidebar-ring: oklch(87.9% 0.169 91.605);
+}
+
+:root.dark[data-color="amber"] {
+  --primary: oklch(82.8% 0.189 84.429);
+  --primary-foreground: oklch(27.9% 0.077 45.635);
+  --ring: oklch(55.5% 0.163 48.998);
+  --accent: oklch(27.9% 0.077 45.635);
+  --accent-foreground: oklch(96.2% 0.059 95.617);
+  --chart-1: oklch(87.9% 0.169 91.605);
+  --chart-2: oklch(76.9% 0.188 70.08);
+  --chart-3: oklch(66.6% 0.179 58.318);
+  --chart-4: oklch(55.5% 0.163 48.998);
+  --chart-5: oklch(47.3% 0.137 46.201);
+  --sidebar-primary: oklch(82.8% 0.189 84.429);
+  --sidebar-primary-foreground: oklch(27.9% 0.077 45.635);
+  --sidebar-accent: oklch(27.9% 0.077 45.635);
+  --sidebar-accent-foreground: oklch(96.2% 0.059 95.617);
+  --sidebar-ring: oklch(55.5% 0.163 48.998);
+}

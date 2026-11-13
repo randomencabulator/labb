@@ -1,0 +1,5 @@
+# The server's packages, one per line with an exact version
+fastapi==0.162.4
+uvicorn==0.54.0
+# Postgres, for when the app has a database (db.py)
+psycopg[binary]==3.3.8

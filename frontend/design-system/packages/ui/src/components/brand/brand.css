@@ -1,0 +1,10 @@
+/* The brand */
+.lb-logo { color: var(--lb-sys-color-accent); flex-shrink: 0; }
+.lb-wordmark { font-weight: var(--lb-weight-black); letter-spacing: var(--lb-tracking-wordmark); font-stretch: expanded; }
+.lb-wordmark .hl {
+  color: var(--lb-sys-color-accent);
+  background: linear-gradient(transparent 52%, var(--lb-sys-color-link-mark) 52% 96%, transparent 96%);
+  padding: 0 .06em;
+  margin: 0 -.06em;
+}
+.lb-hazard { background: repeating-linear-gradient(-45deg, var(--lb-brand-yellow) 0 9px, var(--lb-brand-black) 9px 18px); }

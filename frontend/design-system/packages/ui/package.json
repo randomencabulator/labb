@@ -1,0 +1,18 @@
+{
+  "name": "@labb/ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "labb's components: one stylesheet on @labb/tokens, and React components around it.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.9.0",
+    "@labb/tokens": "^0.1.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  }
+}

@@ -1,0 +1,16 @@
+/* Badges */
+.lb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lb-space-2);
+  font-size: var(--lb-text-xs);
+  padding: 1px var(--lb-space-3);
+  border-radius: var(--lb-radius-sm);
+  background: var(--lb-sys-color-active);
+  color: var(--lb-sys-color-text);
+}
+.lb-badge.accent { background: var(--lb-sys-color-accent-fill); color: var(--lb-sys-color-on-accent); font-weight: var(--lb-weight-semibold); }
+.lb-badge.outline { background: none; border: var(--lb-border-thin) solid var(--lb-sys-color-accent); }
+.lb-badge.error { background: color-mix(in srgb, var(--lb-sys-color-error) 14%, transparent); color: var(--lb-sys-color-error); }
+.lb-badge.mono { font-family: var(--lb-font-mono); font-size: var(--lb-text-2xs); }
+.lb-dot { width: 7px; height: 7px; border-radius: var(--lb-radius-full); background: var(--lb-sys-color-accent-fill); flex-shrink: 0; display: inline-block; }

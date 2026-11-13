@@ -1,0 +1,46 @@
+# labb-sites' front: every site at /artifacts/<name>/, from /srv/sites (each <name> a link to its
+# latest upload), and /_api/ passed to the uploads service, DEPLOY (sites-deploy:4200 in compose).
+# Names are lowercase letters, digits and hyphens, so nothing starting with "." is a site: those
+# paths (the service's own folders) are never served, and nor is anything outside /artifacts/.
+{
+	admin off
+	auto_https off
+	persist_config off
+	servers {
+		# With https, labb's Caddy is in front: believe what it says the request came over
+		trusted_proxies static private_ranges
+	}
+}
+
+:8080 {
+	encode zstd gzip
+
+	handle_path /_api/* {
+		reverse_proxy {$DEPLOY:sites-deploy:4200} {
+			# Browsers send a host's cookies to all its ports: labb's session never goes further
+			header_up Cookie "(__Host-)?labb_session=[^;]*;?\s*" ""
+		}
+	}
+
+	# /artifacts/blog is /artifacts/blog/, so a site's relative links work
+	@bare path_regexp bare ^/artifacts/([a-z0-9-]+)$
+	handle @bare {
+		redir * /artifacts/{re.bare.1}/ 308
+	}
+
+	@site path_regexp ^/artifacts/[a-z0-9-]+/
+	handle @site {
+		uri strip_prefix /artifacts
+		root * /srv/sites
+		header {
+			X-Content-Type-Options nosniff
+			# Each upload shows at once; ETags keep asking cheap
+			Cache-Control no-cache
+		}
+		file_server
+	}
+
+	handle {
+		respond 404
+	}
+}

@@ -1,0 +1,7 @@
+.venv
+__pycache__
+.pytest_cache
+# The artifact template's local install and builds (the builder image installs its own)
+artifacts/template/node_modules
+artifacts/template/.next
+artifacts/template/out

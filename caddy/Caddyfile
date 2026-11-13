@@ -1,0 +1,46 @@
+# labb over https (the `https` profile in compose.yaml), set up from .env:
+# - LABB_HOSTNAME: the names (and addresses) it's reached at, comma-separated,
+#   e.g. "labb.lan, 192.168.1.5"
+# - LABB_TLS: "internal" (the default) for certificates from Caddy's own CA, whose root
+#   (/data/caddy/pki/authorities/local/root.crt) you trust once on each device; or an email
+#   address, for Let's Encrypt certificates of a public domain
+# - LABB_DEFAULT_SNI: what a browser that asks for no name (it was given an IP address) gets
+# People's apps are each on a port of their own of those same names (APP_PORT_FIRST-APP_PORT_LAST,
+# e.g. https://labb.lan:9100), with the same certificates: a certificate is for a name, not a port.
+# So are the sites, on SITES_HTTPS_PORT (https://labb.lan:8301/artifacts/<name>/).
+{
+	default_sni {$LABB_DEFAULT_SNI:localhost}
+	# The root is trusted on the devices, not in this container
+	skip_install_trust
+}
+
+{$LABB_HOSTNAME:localhost} {
+	tls {$LABB_TLS:internal}
+	reverse_proxy labb-web:8000 {
+		# Replies stream as NDJSON: pass every piece on as it comes
+		flush_interval -1
+	}
+}
+
+# The sites (labb-sites, sites/), on a port of their own with the same certificates
+https://:{$SITES_HTTPS_PORT:8301} {
+	reverse_proxy sites:8080
+}
+
+# Apps' ports (start.sh lists them), each straight to its app's container: the spawner gives it the
+# name labb-app-<port> on the labb-apps network
+# Apps' APIs (start.sh lists them too), each to its API's container: labb-app-api-<port>
+# Browsers send a host's cookies to all its ports, so labb's session cookie (labb_session, or
+# __Host-labb_session over https) is taken out of what apps get: an app must never see it
+{$API_SITES} {
+	reverse_proxy labb-app-api-{http.request.port}:8080 {
+		header_up Cookie "(__Host-)?labb_session=[^;]*;?\s*" ""
+	}
+}
+
+{$APP_SITES} {
+	reverse_proxy labb-app-{http.request.port}:8080 {
+		header_up Cookie "(__Host-)?labb_session=[^;]*;?\s*" ""
+		flush_interval -1
+	}
+}

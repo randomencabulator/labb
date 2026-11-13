@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+.claude/settings.local.json
+chats.sqlite*
+wheels/
+crawler/data/
+browser/data/
+backups/
+# Caddy's root certificate (./setup.sh root), for your devices
+caddy-root.crt
+nohup.out

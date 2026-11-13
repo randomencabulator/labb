@@ -1,0 +1,431 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "sys": {
+    "$description": "System tokens: what each value is for. System colours point at reference colours (ref.*), per theme; components use these, never the palette.",
+    "color": {
+      "$type": "color",
+      "surfaces": {
+        "$description": "The page, and what sits on it.",
+        "$extensions": {
+          "dev.labb": {
+            "title": "Surfaces"
+          }
+        },
+        "bg": {
+          "$value": "{ref.sand.50}",
+          "$description": "The page behind everything",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--bg"
+            }
+          }
+        },
+        "surface": {
+          "$value": "{ref.white}",
+          "$description": "Cards, the sidebar, dialogs, menus",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--surface"
+            }
+          }
+        },
+        "active": {
+          "$value": "{ref.sand.200}",
+          "$description": "Hovered and selected rows",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--active"
+            }
+          }
+        },
+        "code-bg": {
+          "$value": "{ref.sand.100}",
+          "$description": "Code blocks and tool lines",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--code-bg"
+            }
+          }
+        },
+        "border": {
+          "$value": "{ref.sand.300}",
+          "$description": "Lines between things, quiet outlines",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--border"
+            }
+          }
+        }
+      },
+      "text": {
+        "$description": "What's read on the surfaces.",
+        "$extensions": {
+          "dev.labb": {
+            "title": "Text"
+          }
+        },
+        "text": {
+          "$value": "{ref.ink.950}",
+          "$description": "Body text, strong outlines",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--text",
+              "contrast": {
+                "on": "bg",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "muted": {
+          "$value": "{ref.sand.500}",
+          "$description": "Labels, hints, secondary text",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--muted",
+              "contrast": {
+                "on": "bg",
+                "min": 4.5
+              }
+            }
+          }
+        }
+      },
+      "brand": {
+        "$description": "Black on light and yellow on dark for lines; yellow to fill with in both.",
+        "$extensions": {
+          "dev.labb": {
+            "title": "Brand"
+          }
+        },
+        "accent": {
+          "$value": "{ref.ink.950}",
+          "$description": "Accent text, focus rings, selected outlines",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--accent",
+              "contrast": {
+                "on": "bg",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "accent-fill": {
+          "$value": "{ref.yellow.300}",
+          "$description": "Primary buttons, switches, the yellow bar",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--accent-fill"
+            }
+          }
+        },
+        "on-accent": {
+          "$value": "{ref.ink.950}",
+          "$description": "Text and icons on accent-fill",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--on-accent",
+              "contrast": {
+                "on": "accent-fill",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "link-mark": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              0.8314,
+              0.0
+            ],
+            "alpha": 0.6,
+            "hex": "#ffd40099"
+          },
+          "$description": "The highlighter under links: yellow.300 at 60% in light, none in dark",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--link-mark"
+            }
+          }
+        },
+        "logo-inner": {
+          "$value": "{ref.yellow.300}",
+          "$description": "The inside of the flask logo",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--logo-inner"
+            }
+          }
+        }
+      },
+      "messages": {
+        "$description": "Your own messages are inverted.",
+        "$extensions": {
+          "dev.labb": {
+            "title": "Messages"
+          }
+        },
+        "user-bg": {
+          "$value": "{ref.ink.950}",
+          "$description": "Your messages, toasts",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--user-bg"
+            }
+          }
+        },
+        "user-text": {
+          "$value": "{ref.sand.50}",
+          "$description": "Text on user-bg",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--user-text",
+              "contrast": {
+                "on": "user-bg",
+                "min": 4.5
+              }
+            }
+          }
+        }
+      },
+      "status": {
+        "$description": "Errors, and the hard shadows.",
+        "$extensions": {
+          "dev.labb": {
+            "title": "Status"
+          }
+        },
+        "error": {
+          "$value": "{ref.red.600}",
+          "$description": "Errors, failed runs, destructive hovers",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--error",
+              "contrast": {
+                "on": "surface",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "hard": {
+          "$value": "{ref.ink.950}",
+          "$description": "Hard offset shadows under popovers",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--hard"
+            }
+          }
+        },
+        "press": {
+          "$value": "{ref.ink.950}",
+          "$description": "The shadow under yellow buttons",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--press"
+            }
+          }
+        }
+      },
+      "overlay": {
+        "$description": "What sits over the page, the same in both themes.",
+        "$extensions": {
+          "dev.labb": {
+            "title": "Overlays"
+          }
+        },
+        "scrim": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.4
+          },
+          "$description": "Behind dialogs: black at 40%"
+        },
+        "knob": {
+          "$value": "{ref.white}",
+          "$description": "The knob of a switch, on or off"
+        }
+      },
+      "code": {
+        "$description": "Syntax colours, each at least 4.5:1 on code-bg. Constants are yellow on dark.",
+        "$extensions": {
+          "dev.labb": {
+            "title": "Code"
+          }
+        },
+        "code-comment": {
+          "$value": "{ref.sand.500}",
+          "$description": "Comments",
+          "$extensions": {
+            "dev.labb": {
+              "contrast": {
+                "on": "code-bg",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "code-keyword": {
+          "$value": "{ref.orange.700}",
+          "$description": "import, const, return, =>",
+          "$extensions": {
+            "dev.labb": {
+              "contrast": {
+                "on": "code-bg",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "code-string": {
+          "$value": "{ref.green.700}",
+          "$description": "Strings",
+          "$extensions": {
+            "dev.labb": {
+              "contrast": {
+                "on": "code-bg",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "code-constant": {
+          "$value": "{ref.amber.800}",
+          "$description": "Numbers, true, CSS values",
+          "$extensions": {
+            "dev.labb": {
+              "contrast": {
+                "on": "code-bg",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "code-tag": {
+          "$value": "{ref.blue.700}",
+          "$description": "JSX and HTML tags, types, CSS selectors",
+          "$extensions": {
+            "dev.labb": {
+              "contrast": {
+                "on": "code-bg",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "code-attr": {
+          "$value": "{ref.purple.700}",
+          "$description": "Props, attributes, CSS properties",
+          "$extensions": {
+            "dev.labb": {
+              "contrast": {
+                "on": "code-bg",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "code-function": {
+          "$value": "{ref.cyan.700}",
+          "$description": "Functions and commands",
+          "$extensions": {
+            "dev.labb": {
+              "contrast": {
+                "on": "code-bg",
+                "min": 4.5
+              }
+            }
+          }
+        },
+        "code-punctuation": {
+          "$value": "{ref.sand.600}",
+          "$description": "Brackets, braces, operators",
+          "$extensions": {
+            "dev.labb": {
+              "contrast": {
+                "on": "code-bg",
+                "min": 4.5
+              }
+            }
+          }
+        }
+      },
+      "series": {
+        "$description": "In this order; checked for colour vision deficiency on surface.",
+        "$extensions": {
+          "dev.labb": {
+            "title": "Chart series"
+          }
+        },
+        "series-1": {
+          "$value": "{ref.blue.600}",
+          "$description": "First series",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--series-1",
+              "contrast": {
+                "on": "surface"
+              }
+            }
+          }
+        },
+        "series-2": {
+          "$value": "{ref.orange.500}",
+          "$description": "Second series",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--series-2",
+              "contrast": {
+                "on": "surface"
+              }
+            }
+          }
+        },
+        "series-3": {
+          "$value": "{ref.green.500}",
+          "$description": "Third series, and success",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--series-3",
+              "contrast": {
+                "on": "surface"
+              }
+            }
+          }
+        },
+        "series-4": {
+          "$value": "{ref.amber.500}",
+          "$description": "Fourth series",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--series-4",
+              "contrast": {
+                "on": "surface"
+              }
+            }
+          }
+        },
+        "series-other": {
+          "$value": "{ref.ink.400}",
+          "$description": "Everything else",
+          "$extensions": {
+            "dev.labb": {
+              "web": "--series-other",
+              "contrast": {
+                "on": "surface"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

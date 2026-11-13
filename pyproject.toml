@@ -1,0 +1,80 @@
+[project]
+name = "labb"
+version = "0.33.0"
+description = "A self-hosted AI assistant: a web chat for everyone at home and an agent in every terminal, on your own models"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Random Encabulator" }]
+requires-python = ">=3.14"
+dependencies = [
+    "ddgs>=9.16.0",
+    "fastapi>=0.159.1",
+    "httpx>=0.28.1",
+    "langchain>=1.4.6",
+    "langchain-anthropic>=1.7.6",
+    "langchain-mcp-adapters>=0.3.2",
+    "langchain-ollama>=1.1.0",
+    "langchain-openai>=1.7.2",
+    "langgraph>=1.2.16",
+    "langgraph-checkpoint-sqlite>=3.1.2",
+    "prompt-toolkit>=3.0.53",
+    "python-dotenv>=1.2.4",
+    "pyyaml>=6.0.3",
+    "rich>=15.0.0",
+    "uvicorn>=0.54.0",
+]
+
+[project.optional-dependencies]
+# The browser on this PC (labb --install-browser); without it, the server's
+browser = ["playwright>=1.55"]
+
+[project.urls]
+Homepage = "https://labb.fyi"
+Repository = "https://github.com/randomencabulator/labb"
+Issues = "https://github.com/randomencabulator/labb/issues"
+
+[project.scripts]
+labb = "labb.cli.app:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/labb", "browser/src/labb_browser"]
+
+[dependency-groups]
+dev = [
+    "playwright>=1.55",
+    "pytest>=9.1.1",
+    "pytest-timeout>=2.4.0",
+    "ruff>=0.17.4",
+]
+# Only the server (Docker, or a checkout) has the documents' search (server/documents.py);
+# the wheel the PCs install leaves these out, and its search goes through the server
+server = [
+    "cryptography>=50.0.2",
+    "langchain-text-splitters>=1.1.3",
+    "langgraph-checkpoint-postgres>=3.2.0",
+    "psycopg[binary]>=3.3.6",
+    "pypdf>=6.21.2",
+    "tzdata>=2026.5",
+]
+
+[tool.uv]
+default-groups = ["dev", "server"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# A test that hangs fails instead of hanging the run (pytest-timeout)
+timeout = 300
+
+# Mistakes only (pyflakes and syntax), not style: the code keeps its own hand style. CI runs it on
+# this project and the services: uv run ruff check . crawler sandbox spawner browser sites
+[tool.ruff]
+target-version = "py314"
+extend-exclude = ["frontend", "mobile"]
+
+[tool.ruff.lint]
+select = ["E9", "F"]

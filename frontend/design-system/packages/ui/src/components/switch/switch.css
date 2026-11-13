@@ -1,0 +1,33 @@
+/* Switches: Base UI's root is the track, its thumb the knob */
+.lb-switch {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 36px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: var(--lb-sys-color-border);
+  transition: background var(--lb-motion-base);
+  cursor: pointer;
+}
+.lb-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--lb-sys-color-knob);
+  transition: transform var(--lb-motion-base);
+  box-shadow: var(--lb-shadow-knob);
+}
+.lb-switch[data-checked] { background: var(--lb-sys-color-accent-fill); }
+.lb-switch-thumb[data-checked] { transform: translateX(16px); }
+.lb-switch:focus-visible { outline: var(--lb-border-focus) solid var(--lb-sys-color-accent); outline-offset: 2px; }
+.lb-switch[data-disabled] { opacity: .5; cursor: default; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-switch, .lb-switch-thumb { transition: none; }
+}

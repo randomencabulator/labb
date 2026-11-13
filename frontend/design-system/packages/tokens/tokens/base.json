@@ -1,0 +1,634 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "brand": {
+    "$type": "color",
+    "$description": "The fixed brand colours, the same in both themes (the hazard stripes use them): names for palette steps.",
+    "yellow": {
+      "$value": "{ref.yellow.300}",
+      "$description": "Hazard yellow"
+    },
+    "black": {
+      "$value": "{ref.ink.950}",
+      "$description": "Near-black"
+    },
+    "paper": {
+      "$value": "{ref.sand.50}",
+      "$description": "Warm paper"
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "$description": "Spacing. The app works on a 2px grid, mostly 4, 6, 8, 10, 12 and 16.",
+    "0": {
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
+    },
+    "1": {
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      }
+    },
+    "2": {
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    },
+    "3": {
+      "$value": {
+        "value": 6,
+        "unit": "px"
+      }
+    },
+    "4": {
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "5": {
+      "$value": {
+        "value": 10,
+        "unit": "px"
+      }
+    },
+    "6": {
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "7": {
+      "$value": {
+        "value": 14,
+        "unit": "px"
+      }
+    },
+    "8": {
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "10": {
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      }
+    },
+    "12": {
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      }
+    },
+    "16": {
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      }
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "$description": "Corners: small and square-ish, with round ones only for sheets and dots.",
+    "xs": {
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "$description": "Inline code, the corner of your messages"
+    },
+    "sm": {
+      "$value": {
+        "value": 3,
+        "unit": "px"
+      },
+      "$description": "Badges, tool lines, secrets"
+    },
+    "md": {
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "$description": "Buttons, inputs, chips, toasts"
+    },
+    "lg": {
+      "$value": {
+        "value": 6,
+        "unit": "px"
+      },
+      "$description": "Cards, messages, dialogs, the message box"
+    },
+    "xl": {
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      },
+      "$description": "Large panels"
+    },
+    "sheet": {
+      "$value": {
+        "value": 14,
+        "unit": "px"
+      },
+      "$description": "The top of bottom sheets on phones"
+    },
+    "full": {
+      "$value": {
+        "value": 999,
+        "unit": "px"
+      },
+      "$description": "Dots and avatars"
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "sans": {
+        "$value": [
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "sans-serif"
+        ],
+        "$description": "Everything read"
+      },
+      "mono": {
+        "$value": [
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Consolas",
+          "monospace"
+        ],
+        "$description": "Code, counts and labels"
+      }
+    },
+    "size": {
+      "$type": "dimension",
+      "2xs": {
+        "$value": {
+          "value": 11,
+          "unit": "px"
+        },
+        "$description": "Mono labels, table heads, counts"
+      },
+      "xs": {
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        },
+        "$description": "Hints, small print, badges"
+      },
+      "sm": {
+        "$value": {
+          "value": 13,
+          "unit": "px"
+        },
+        "$description": "Controls, sidebar, tables"
+      },
+      "md": {
+        "$value": {
+          "value": 14,
+          "unit": "px"
+        },
+        "$description": "Secondary body, toasts"
+      },
+      "base": {
+        "$value": {
+          "value": 15,
+          "unit": "px"
+        },
+        "$description": "Body text"
+      },
+      "lg": {
+        "$value": {
+          "value": 17,
+          "unit": "px"
+        },
+        "$description": "Small headings"
+      },
+      "xl": {
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        },
+        "$description": "Page titles"
+      },
+      "2xl": {
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        },
+        "$description": "Section headings"
+      },
+      "3xl": {
+        "$value": {
+          "value": 32,
+          "unit": "px"
+        },
+        "$description": "The empty chat's greeting"
+      }
+    },
+    "lineHeight": {
+      "$type": "number",
+      "$description": "The line height for each font size, as a multiple of it.",
+      "2xs": {
+        "$value": 1.4
+      },
+      "xs": {
+        "$value": 1.45
+      },
+      "sm": {
+        "$value": 1.5
+      },
+      "md": {
+        "$value": 1.55
+      },
+      "base": {
+        "$value": 1.55
+      },
+      "lg": {
+        "$value": 1.4
+      },
+      "xl": {
+        "$value": 1.3
+      },
+      "2xl": {
+        "$value": 1.2
+      },
+      "3xl": {
+        "$value": 1.1
+      }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": {
+        "$value": 400
+      },
+      "medium": {
+        "$value": 500
+      },
+      "semibold": {
+        "$value": 600
+      },
+      "bold": {
+        "$value": 700
+      },
+      "black": {
+        "$value": 900
+      }
+    },
+    "tracking": {
+      "$type": "number",
+      "$description": "Letter spacing in em: the format's dimensions are px or rem only.",
+      "$extensions": {
+        "dev.labb": {
+          "unit": "em"
+        }
+      },
+      "heading": {
+        "$value": -0.03,
+        "$description": "Headings"
+      },
+      "wordmark": {
+        "$value": -0.05,
+        "$description": "The wordmark"
+      },
+      "label": {
+        "$value": 0.08,
+        "$description": "Mono labels over sections"
+      }
+    }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "$description": "Hard offset shadows are the brand; soft ones only for small lifts.",
+    "press": {
+      "$value": {
+        "color": "{sys.color.status.press}",
+        "offsetX": {
+          "value": 2,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 2,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "Under yellow buttons at rest"
+    },
+    "press-hover": {
+      "$value": {
+        "color": "{sys.color.status.press}",
+        "offsetX": {
+          "value": 3,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 3,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "Under yellow buttons on hover"
+    },
+    "toast": {
+      "$value": {
+        "color": "{sys.color.status.hard}",
+        "offsetX": {
+          "value": 4,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 4,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "Toasts"
+    },
+    "popover": {
+      "$value": {
+        "color": "{sys.color.status.hard}",
+        "offsetX": {
+          "value": 5,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 5,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "Menus, popovers, dialogs, tooltips"
+    },
+    "lift": {
+      "$value": {
+        "color": "{sys.color.brand.accent-fill}",
+        "offsetX": {
+          "value": 4,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 4,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "Cards on hover, the focused message box"
+    },
+    "bar": {
+      "$value": {
+        "color": "{sys.color.brand.accent-fill}",
+        "offsetX": {
+          "value": 3,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 0,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "The yellow bar on what's open",
+      "$extensions": {
+        "dev.labb": {
+          "inset": true
+        }
+      }
+    },
+    "soft": {
+      "$value": {
+        "color": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "alpha": 0.1
+        },
+        "offsetX": {
+          "value": 0,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 1,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 2,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "A picked segment"
+    },
+    "knob": {
+      "$value": {
+        "color": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 0.25
+        },
+        "offsetX": {
+          "value": 0,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 1,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 2,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "Under a switch's knob"
+    }
+  },
+  "motion": {
+    "$type": "transition",
+    "press": {
+      "$value": {
+        "duration": {
+          "value": 80,
+          "unit": "ms"
+        },
+        "delay": {
+          "value": 0,
+          "unit": "ms"
+        },
+        "timingFunction": [
+          0.25,
+          0.1,
+          0.25,
+          1
+        ]
+      },
+      "$description": "Buttons lifting and pressing"
+    },
+    "lift": {
+      "$value": {
+        "duration": {
+          "value": 100,
+          "unit": "ms"
+        },
+        "delay": {
+          "value": 0,
+          "unit": "ms"
+        },
+        "timingFunction": [
+          0.25,
+          0.1,
+          0.25,
+          1
+        ]
+      },
+      "$description": "Cards lifting"
+    },
+    "base": {
+      "$value": {
+        "duration": {
+          "value": 150,
+          "unit": "ms"
+        },
+        "delay": {
+          "value": 0,
+          "unit": "ms"
+        },
+        "timingFunction": [
+          0.25,
+          0.1,
+          0.25,
+          1
+        ]
+      },
+      "$description": "Switches, colour changes"
+    },
+    "sheet": {
+      "$value": {
+        "duration": {
+          "value": 240,
+          "unit": "ms"
+        },
+        "delay": {
+          "value": 0,
+          "unit": "ms"
+        },
+        "timingFunction": [
+          0.2,
+          1,
+          0.3,
+          1
+        ]
+      },
+      "$description": "Sheets sliding up"
+    }
+  },
+  "border": {
+    "$type": "dimension",
+    "thin": {
+      "$value": {
+        "value": 1,
+        "unit": "px"
+      }
+    },
+    "strong": {
+      "$value": {
+        "value": 1.5,
+        "unit": "px"
+      }
+    },
+    "heavy": {
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      }
+    },
+    "focus": {
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      }
+    }
+  },
+  "z": {
+    "$type": "number",
+    "$description": "Stacking order.",
+    "sticky": {
+      "$value": 1
+    },
+    "popover": {
+      "$value": 25
+    },
+    "modal": {
+      "$value": 30
+    },
+    "toast": {
+      "$value": 40
+    },
+    "sheet": {
+      "$value": 60
+    }
+  }
+}

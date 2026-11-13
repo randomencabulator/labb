@@ -1,0 +1,22 @@
+/* Fields: Base UI marks the root and its parts data-invalid */
+.lb-field { display: flex; flex-direction: column; gap: 5px; font-size: var(--lb-text-sm); color: var(--lb-sys-color-muted); min-width: 0; }
+.lb-field-label { font-weight: var(--lb-weight-medium); }
+.lb-field-hint, .lb-field-error { margin: 0; font-size: var(--lb-text-xs); }
+.lb-field-error { color: var(--lb-sys-color-error); }
+.lb-field[data-disabled] { opacity: .6; }
+.lb-input, .lb-textarea, .lb-select {
+  width: 100%;
+  font: inherit;
+  font-size: var(--lb-text-base);
+  color: var(--lb-sys-color-text);
+  background: var(--lb-sys-color-bg);
+  border: var(--lb-border-thin) solid var(--lb-sys-color-border);
+  border-radius: var(--lb-radius-md);
+  padding: var(--lb-space-3) var(--lb-space-5);
+}
+.lb-textarea { resize: vertical; min-height: 96px; line-height: 1.45; padding: 9px var(--lb-space-6); }
+.lb-input:focus, .lb-textarea:focus, .lb-select:focus { outline: var(--lb-border-focus) solid var(--lb-sys-color-accent); outline-offset: -1px; }
+.lb-input[data-invalid], .lb-textarea[data-invalid] { border-color: var(--lb-sys-color-error); }
+.lb-input[data-invalid]:focus, .lb-textarea[data-invalid]:focus { outline-color: var(--lb-sys-color-error); }
+.lb-input[data-disabled], .lb-textarea[data-disabled] { cursor: not-allowed; }
+.lb-input::placeholder, .lb-textarea::placeholder { color: var(--lb-sys-color-muted); }

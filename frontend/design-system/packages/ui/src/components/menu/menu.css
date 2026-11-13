@@ -1,0 +1,41 @@
+/* Menus and popovers: outlined, on a hard shadow */
+.lb-menu-positioner { z-index: var(--lb-z-popover); outline: 0; }
+.lb-menu {
+  min-width: 220px;
+  padding: var(--lb-space-3);
+  background: var(--lb-sys-color-surface);
+  border: var(--lb-border-strong) solid var(--lb-sys-color-text);
+  border-radius: 5px;
+  box-shadow: var(--lb-shadow-popover);
+  display: flex;
+  flex-direction: column;
+  gap: var(--lb-space-1);
+}
+.lb-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--lb-space-4);
+  font: inherit;
+  font-size: var(--lb-text-md);
+  color: var(--lb-sys-color-text);
+  background: none;
+  border: 0;
+  border-radius: var(--lb-radius-md);
+  padding: 7px var(--lb-space-5);
+  text-align: left;
+  cursor: pointer;
+}
+.lb-menu-item { outline: 0; user-select: none; }
+/* The highlight is the focus indicator; no ring on top of it */
+.lb-root .lb-menu-item:focus-visible { outline: 0; }
+.lb-menu-item[data-highlighted] { background: var(--lb-sys-color-active); }
+.lb-menu-item[data-disabled] { opacity: .5; cursor: default; }
+.lb-menu-item.danger { color: var(--lb-sys-color-error); }
+.lb-menu-sep { height: 1px; background: var(--lb-sys-color-border); margin: var(--lb-space-2) 0; border: 0; }
+.lb-menu { transform-origin: var(--transform-origin); transition: opacity var(--lb-motion-press), transform var(--lb-motion-press); outline: 0; }
+.lb-menu[data-starting-style], .lb-menu[data-ending-style] { opacity: 0; transform: translateY(-4px); }
+.lb-menu[data-side="top"][data-starting-style], .lb-menu[data-side="top"][data-ending-style] { transform: translateY(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-menu { transition: none; }
+}

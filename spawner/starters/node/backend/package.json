@@ -1,0 +1,9 @@
+{
+  "name": "app-server",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "express": "5.3.0",
+    "pg": "8.23.1"
+  }
+}

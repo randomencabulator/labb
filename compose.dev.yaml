@@ -1,0 +1,34 @@
+# Development: labb's images built from this checkout instead of pulled from GHCR. Compose merges it
+# over compose.yaml (everything else comes from there). ./setup.sh dev puts this in .env, so plain
+# `docker compose up -d --build` uses it:
+#   COMPOSE_FILE=compose.yaml:compose.dev.yaml
+# The images get local names (:dev), so a build never stands in for a release's image on this machine.
+services:
+  labb-web:
+    build: .
+    image: labb-web:dev
+    pull_policy: build
+  crawler:
+    build: ./crawler
+    image: labb-web-search-crawler:dev
+    pull_policy: build
+  browser:
+    build: ./browser
+    image: labb-browser:dev
+    pull_policy: build
+  sandbox:
+    build: ./sandbox
+    image: labb-sandbox:dev
+    pull_policy: build
+  spawner:
+    build: ./spawner
+    image: labb-spawner:dev
+    pull_policy: build
+  sites:
+    build: ./sites/front
+    image: labb-sites-front:dev
+    pull_policy: build
+  sites-deploy:
+    build: ./sites
+    image: labb-sites:dev
+    pull_policy: build

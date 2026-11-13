@@ -1,0 +1,136 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "sys": {
+    "color": {
+      "$type": "color",
+      "surfaces": {
+        "bg": {
+          "$value": "{ref.ink.950}"
+        },
+        "surface": {
+          "$value": "{ref.ink.900}"
+        },
+        "active": {
+          "$value": "{ref.ink.800}"
+        },
+        "code-bg": {
+          "$value": "{ref.ink.925}"
+        },
+        "border": {
+          "$value": "{ref.ink.700}"
+        }
+      },
+      "text": {
+        "text": {
+          "$value": "{ref.ink.100}"
+        },
+        "muted": {
+          "$value": "{ref.ink.400}"
+        }
+      },
+      "brand": {
+        "accent": {
+          "$value": "{ref.yellow.300}"
+        },
+        "accent-fill": {
+          "$value": "{ref.yellow.300}"
+        },
+        "on-accent": {
+          "$value": "{ref.ink.950}"
+        },
+        "link-mark": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0
+          }
+        },
+        "logo-inner": {
+          "$value": "{ref.ink.950}"
+        }
+      },
+      "messages": {
+        "user-bg": {
+          "$value": "{ref.ink.100}"
+        },
+        "user-text": {
+          "$value": "{ref.ink.950}"
+        }
+      },
+      "status": {
+        "error": {
+          "$value": "{ref.red.400}"
+        },
+        "hard": {
+          "$value": "{ref.black}"
+        },
+        "press": {
+          "$value": "{ref.yellow.600}"
+        }
+      },
+      "overlay": {
+        "scrim": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.4
+          }
+        },
+        "knob": {
+          "$value": "{ref.white}"
+        }
+      },
+      "code": {
+        "code-comment": {
+          "$value": "{ref.ink.400}"
+        },
+        "code-keyword": {
+          "$value": "{ref.orange.400}"
+        },
+        "code-string": {
+          "$value": "{ref.green.300}"
+        },
+        "code-constant": {
+          "$value": "{ref.yellow.300}"
+        },
+        "code-tag": {
+          "$value": "{ref.blue.400}"
+        },
+        "code-attr": {
+          "$value": "{ref.purple.300}"
+        },
+        "code-function": {
+          "$value": "{ref.cyan.400}"
+        },
+        "code-punctuation": {
+          "$value": "{ref.ink.300}"
+        }
+      },
+      "series": {
+        "series-1": {
+          "$value": "{ref.blue.500}"
+        },
+        "series-2": {
+          "$value": "{ref.orange.600}"
+        },
+        "series-3": {
+          "$value": "{ref.green.600}"
+        },
+        "series-4": {
+          "$value": "{ref.amber.600}"
+        },
+        "series-other": {
+          "$value": "{ref.ink.500}"
+        }
+      }
+    }
+  }
+}

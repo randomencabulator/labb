@@ -1,0 +1,23 @@
+/* Cards: numbered sample cards lift onto a yellow shadow */
+.lb-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lb-space-2);
+  padding: var(--lb-space-6) var(--lb-space-7);
+  background: var(--lb-sys-color-surface);
+  border: var(--lb-border-strong) solid var(--lb-sys-color-border);
+  border-radius: var(--lb-radius-lg);
+  color: var(--lb-sys-color-text);
+  text-align: left;
+  font: inherit;
+}
+.lb-card.interactive { cursor: pointer; transition: transform var(--lb-motion-lift), box-shadow var(--lb-motion-lift), border-color var(--lb-motion-lift); }
+.lb-card.interactive:hover { border-color: var(--lb-sys-color-accent); transform: translate(-2px, -2px); box-shadow: var(--lb-shadow-lift); }
+.lb-card-eyebrow { font: var(--lb-weight-bold) var(--lb-text-2xs) var(--lb-font-mono); letter-spacing: var(--lb-tracking-label); color: var(--lb-sys-color-muted); }
+.lb-card-title { font-weight: var(--lb-weight-semibold); font-size: var(--lb-text-md); }
+.lb-card-body { color: var(--lb-sys-color-muted); font-size: var(--lb-text-sm); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-card.interactive { transition: none; }
+  .lb-card.interactive:hover { transform: none; }
+}

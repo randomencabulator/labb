@@ -1,0 +1,425 @@
+# labb: the server, its labb-web-search-crawler and Postgres. Volumes are named labb_…
+# labb's own images are pulled from GHCR, built by .github/workflows/release.yml for each release
+# (a release's labb-server.tar.gz pins LABB_VERSION's default to its version). From a checkout,
+# compose.dev.yaml builds them from the source instead: ./setup.sh dev
+name: labb
+
+services:
+  labb-web:
+    image: ghcr.io/randomencabulator/labb-web:${LABB_VERSION:-latest}
+    ports:
+      # With https (below), LABB_BIND=127.0.0.1 keeps plain http to this machine
+      - "${LABB_BIND:-0.0.0.0}:${PORT:-8000}:8000"
+    # MODEL, OLLAMA_HOST, API keys… (optional: the defaults work without one)
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # Searches and page reads go to the crawler below, inside this compose project
+      CRAWLER_URL: ${CRAWLER_URL:-http://crawler:3000}
+      CRAWLER_TOKEN: ${CRAWLER_TOKEN:-}
+      # Without CRAWLER_TOKEN, the token the crawler makes on its first start
+      CRAWLER_TOKEN_FILE: /run/labb-crawler/token
+      # Chats, accounts, usage, agents, tasks, and the documents' and memories' vectors are kept
+      # in the Postgres below
+      LABB_DATABASE_URL: ${LABB_DATABASE_URL:-postgresql://labb:${POSTGRES_PASSWORD:-labb}@postgres:5432/labb}
+      # Studio's Python steps run in the sandbox below
+      SANDBOX_URL: ${SANDBOX_URL:-http://sandbox:4000}
+      SANDBOX_TOKEN: ${SANDBOX_TOKEN:-}
+      # Without SANDBOX_TOKEN, the token the sandbox makes on its first start
+      SANDBOX_TOKEN_FILE: /run/labb-sandbox/token
+      # The browser tools use the service below; its token is on a volume they share
+      BROWSER_URL: ${BROWSER_URL:-http://browser:3100}
+      BROWSER_TOKEN: ${BROWSER_TOKEN:-}
+      BROWSER_TOKEN_FILE: /run/labb-browser/token
+      # People's apps are started by the spawner below; its token is on a volume they share
+      SPAWNER_URL: ${SPAWNER_URL:-http://spawner:4100}
+      SPAWNER_TOKEN: ${SPAWNER_TOKEN:-}
+      SPAWNER_TOKEN_FILE: /run/labb-spawner/token
+      # Web pages the model builds (artifacts) are published to labb-sites below, with its token, and
+      # opened at this server's host name on SITES_PORT (SITES_HTTPS_PORT with https), or SITES_PUBLIC_URL
+      SITES_URL: ${SITES_URL:-http://sites-deploy:4200}
+      SITES_TOKEN: ${SITES_TOKEN:-}
+      SITES_TOKEN_FILE: /run/labb-sites/token
+      SITES_PORT: ${SITES_PORT:-8300}
+      SITES_HTTPS_PORT: ${SITES_HTTPS_PORT:-8301}
+      SITES_PUBLIC_URL: ${SITES_PUBLIC_URL:-}
+      # labb's address as apps see it on the labb-apps network, for the apps that may use it
+      APPS_LABB_URL: ${APPS_LABB_URL:-http://labb-web:8000}
+      # Speech goes to speaches below: the provider "speaches", and its models (downloaded into it
+      # when the server starts) to listen and speak, until Settings → Models → Speech picks others
+      SPEACHES_URL: ${SPEACHES_URL:-http://speaches:8000/v1}
+      SPEECH_TO_TEXT_MODEL: ${SPEECH_TO_TEXT_MODEL:-speaches:Systran/faster-whisper-small}
+      TEXT_TO_SPEECH_MODEL: ${TEXT_TO_SPEECH_MODEL:-speaches:speaches-ai/Kokoro-82M-v1.0-ONNX}
+      TTS_VOICE: ${TTS_VOICE:-af_heart}
+      # Whose X-Forwarded-Proto/-For to believe: with https, Caddy's ("*", with LABB_BIND=127.0.0.1
+      # so only Caddy and this machine reach the server), so it knows it's on https (secure cookies)
+      FORWARDED_ALLOW_IPS: ${FORWARDED_ALLOW_IPS:-127.0.0.1,::1}
+    networks: [default, crawler, sandbox, browser, spawner, apps, sites]
+    depends_on:
+      crawler:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    # Ollama runs on this same machine: from the container, it's at host.docker.internal
+    # (set OLLAMA_HOST=http://host.docker.internal:11434 in .env), or at the machine's LAN address
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - labb-data:/app/data
+      - sandbox-token:/run/labb-sandbox:ro
+      - browser-token:/run/labb-browser:ro
+      - spawner-token:/run/labb-spawner:ro
+      - crawler-token:/run/labb-crawler:ro
+      - sites-token:/run/labb-sites:ro
+      # npx's and uvx's downloads for MCP servers, so they aren't downloaded again after an update
+      - labb-cache:/home/labb/.cache
+    restart: unless-stopped
+
+  # labb-web-search-crawler (crawler/): web pages as Markdown, and searches that read the results.
+  # Not published: labb reaches it here, and PCs through the server's /crawler. On a network of its
+  # own with the server and Postgres (it reads any page, in Chromium), behind a token.
+  crawler:
+    image: ghcr.io/randomencabulator/labb-web-search-crawler:${LABB_VERSION:-latest}
+    environment:
+      # The pages it read lately, in a table of their own in the same Postgres
+      CRAWLER_DATABASE_URL: ${CRAWLER_DATABASE_URL:-postgresql://labb:${POSTGRES_PASSWORD:-labb}@postgres:5432/labb}
+      CRAWLER_TOKEN: ${CRAWLER_TOKEN:-}
+      # Without CRAWLER_TOKEN, it makes one here on its first start, for the server
+      CRAWLER_TOKEN_FILE: /run/labb-crawler/token
+    volumes:
+      - crawler-token:/run/labb-crawler
+    networks: [crawler]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Chromium uses /dev/shm heavily; Docker's 64 MB default makes tabs crash
+    shm_size: 1gb
+    # Reaps the browser processes each render leaves behind
+    init: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 1024
+    mem_limit: 3g
+    restart: unless-stopped
+
+  # labb-browser (browser/): the browser the model can use, and people can watch and take over. On a
+  # network of its own with the server, so it reaches the internet but not the database or the other
+  # services; it refuses private addresses too. People's sign-ins are kept on its volume.
+  browser:
+    image: ghcr.io/randomencabulator/labb-browser:${LABB_VERSION:-latest}
+    environment:
+      BROWSER_TOKEN: ${BROWSER_TOKEN:-}
+      BROWSER_TOKEN_FILE: /run/labb-browser/token
+    volumes:
+      - browser-data:/data
+      - browser-token:/run/labb-browser
+    networks: [browser]
+    # Chromium uses /dev/shm heavily; Docker's 64 MB default makes tabs crash
+    shm_size: 1gb
+    init: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 1024
+    mem_limit: 3g
+    cpus: 2.0
+    restart: unless-stopped
+
+  # labb-sandbox (sandbox/): runs Studio's Python steps. Only on the internal `sandbox` network,
+  # so the code has no internet and nothing reaches it but the server; read-only, a user per run,
+  # and only the capabilities switching users needs.
+  sandbox:
+    image: ghcr.io/randomencabulator/labb-sandbox:${LABB_VERSION:-latest}
+    environment:
+      SANDBOX_TOKEN: ${SANDBOX_TOKEN:-}
+      # Without SANDBOX_TOKEN, it makes one here on its first start, readable by the server's user (1000) only
+      SANDBOX_TOKEN_FILE: /run/labb-sandbox/token
+    volumes:
+      - sandbox-token:/run/labb-sandbox
+    networks: [sandbox]
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,mode=1777
+    cap_drop: [ALL]
+    cap_add: [SETUID, SETGID, CHOWN, KILL, DAC_OVERRIDE, FOWNER]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    mem_limit: 1g
+    cpus: 1.0
+    init: true
+    restart: unless-stopped
+
+  # labb-spawner (spawner/): starts people's apps, each a container of its own, published on a port of
+  # its own of APP_PORT_FIRST-APP_PORT_LAST (http://<labb's host>:9100...), straight to the browser.
+  # With https, Caddy has those ports for TLS and passes each to its container on the `apps` network.
+  # The only service with the Docker socket (as good as root here), so it's on an internal network
+  # with the server only, behind a token. The apps run beside labb, not in this compose project.
+  spawner:
+    image: ghcr.io/randomencabulator/labb-spawner:${LABB_VERSION:-latest}
+    environment:
+      SPAWNER_TOKEN: ${SPAWNER_TOKEN:-}
+      SPAWNER_TOKEN_FILE: /run/labb-spawner/token
+      APP_NETWORK: labb-apps
+      APP_PORT_FIRST: ${APP_PORT_FIRST:-9100}
+      APP_PORT_LAST: ${APP_PORT_LAST:-9199}
+      # Where apps' ports are published: 127.0.0.1 for this machine only
+      APP_BIND: ${APP_BIND:-0.0.0.0}
+      # With the https profile, Caddy has apps' ports, so the containers aren't published on them
+      LABB_PROFILES: ${COMPOSE_PROFILES:-}
+      # Stop apps unused this many minutes (0: never); opening one starts it again
+      APP_IDLE_MINUTES: ${APP_IDLE_MINUTES:-0}
+      # Apps on this server in all (0: as many as there are ports); 10 per person either way
+      APP_MAX_TOTAL: ${APP_MAX_TOTAL:-0}
+      # How much an app may keep in /data (MB)
+      APP_DATA_MB: ${APP_DATA_MB:-1024}
+      # Apps' databases, on apps-postgres below (database.py); its admin password is made here on the first start
+      APPS_DATABASE_ADMIN_URL: postgresql://labb_apps@apps-postgres:5432/postgres
+      APPS_DATABASE_PASSWORD_FILE: /run/labb-apps-db/password
+      APPS_DATABASE_NETWORK: labb-apps-db
+      # How big an app's database may get (MB); one past it is stopped
+      APP_DB_MB: ${APP_DB_MB:-512}
+      # An app's API is on its port + this (9100 → 9200)
+      APP_API_PORT_OFFSET: ${APP_API_PORT_OFFSET:-100}
+      # Web pages the agent builds in chats (artifacts.py): how many each person may have
+      ARTIFACT_MAX: ${ARTIFACT_MAX:-50}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - spawner-token:/run/labb-spawner
+      # Apps' files (their source) and their last build's log
+      - spawner-data:/data
+      - apps-db-secret:/run/labb-apps-db
+    networks: [spawner, apps-db]
+    read_only: true
+    # Where a build's files are packed before Docker gets them
+    tmpfs:
+      - /tmp:size=256m
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 256m
+    init: true
+    restart: unless-stopped
+
+  # The apps' own Postgres (spawner/database.py): a database and a role per app, reached by the apps
+  # on labb-apps, and managed by the spawner (its admin password, random, made by the spawner on its
+  # first start, is on the apps-db-secret volume). Not labb's database, which apps never reach.
+  apps-postgres:
+    image: pgvector/pgvector:pg18-trixie
+    environment:
+      POSTGRES_USER: labb_apps
+      POSTGRES_PASSWORD_FILE: /run/labb-apps-db/password
+      POSTGRES_DB: postgres
+    volumes:
+      - apps-postgres-data:/var/lib/postgresql
+      - apps-db-secret:/run/labb-apps-db:ro
+    networks: [apps, apps-db]
+    depends_on:
+      # Its password is made by the spawner
+      spawner:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U labb_apps -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # labb-sites (sites/): static websites, each at http://<labb's host>:SITES_PORT/artifacts/<name>/, uploaded
+  # as one archive to /_api/artifacts/<name> (sites/README.md). Two containers on the sites-data volume: this
+  # Caddy, serving it read-only and the only one published, and sites-deploy, which takes the
+  # uploads behind a token, on an internal network only this one reaches. With https, labb's Caddy
+  # serves them on SITES_HTTPS_PORT.
+  sites:
+    image: ghcr.io/randomencabulator/labb-sites-front:${LABB_VERSION:-latest}
+    ports:
+      - "${SITES_BIND:-0.0.0.0}:${SITES_PORT:-8300}:8080"
+    environment:
+      DEPLOY: sites-deploy:4200
+    volumes:
+      - sites-data:/srv/sites:ro
+    networks: [sites, sites-public]
+    depends_on:
+      sites-deploy:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    mem_limit: 256m
+    restart: unless-stopped
+
+  # Takes the sites' uploads (sites/): the token for them is SITES_TOKEN, else the one it makes on
+  # its first start: docker compose exec sites-deploy cat /run/labb-sites/token
+  sites-deploy:
+    image: ghcr.io/randomencabulator/labb-sites:${LABB_VERSION:-latest}
+    environment:
+      SITES_TOKEN: ${SITES_TOKEN:-}
+      SITES_TOKEN_FILE: /run/labb-sites/token
+      SITES_MAX_MB: ${SITES_MAX_MB:-100}
+      SITES_MAX_FILES: ${SITES_MAX_FILES:-10000}
+      SITES_PUBLIC_URL: ${SITES_PUBLIC_URL:-}
+    volumes:
+      - sites-data:/srv/sites
+      - sites-token:/run/labb-sites
+    networks: [sites]
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 256m
+    init: true
+    restart: unless-stopped
+
+  # The server's database: Postgres 18 with pgvector, for searching documents and memories by
+  # meaning. Not published: only labb-web and the crawler reach it.
+  # Back it up with: docker compose exec postgres pg_dump -U labb labb > labb.sql
+  postgres:
+    # The trixie build: the same Debian (and collation) as postgres:18, so its data folder opens as it was
+    image: pgvector/pgvector:pg18-trixie
+    environment:
+      POSTGRES_USER: labb
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-labb}
+      POSTGRES_DB: labb
+    volumes:
+      # Postgres 18 keeps its data in a folder per major version under this one
+      - postgres-data:/var/lib/postgresql
+    # The crawler reaches it on its own network, for its table of pages
+    networks: [default, crawler]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U labb -d labb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # https (optional): ./setup.sh https, then docker compose up -d. Caddy in front of labb on
+  # 443 (http on 80 only sends people there), with certificates from its own CA on your network
+  # (trust caddy-root.crt once on each device: ./setup.sh root) or Let's Encrypt's for a public
+  # domain. See caddy/Caddyfile and docs/guide.md, HTTPS.
+  caddy:
+    image: caddy:2.11.9
+    profiles: [https]
+    ports:
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTP_PORT:-80}:80"
+      # People's apps over https, a port each, with labb's certificates, passed straight to their
+      # containers (see caddy/Caddyfile); and their APIs, on each one's port + 100
+      - "${APP_PORT_FIRST:-9100}-${APP_PORT_LAST:-9199}:${APP_PORT_FIRST:-9100}-${APP_PORT_LAST:-9199}"
+      - "${APP_API_PORT_FIRST:-9200}-${APP_API_PORT_LAST:-9299}:${APP_API_PORT_FIRST:-9200}-${APP_API_PORT_LAST:-9299}"
+      # The sites (labb-sites), over https
+      - "${SITES_HTTPS_PORT:-8301}:${SITES_HTTPS_PORT:-8301}"
+    entrypoint: ["/etc/caddy/start.sh"]
+    environment:
+      LABB_HOSTNAME: ${LABB_HOSTNAME:-localhost}
+      APP_PORT_FIRST: ${APP_PORT_FIRST:-9100}
+      APP_PORT_LAST: ${APP_PORT_LAST:-9199}
+      APP_API_PORT_OFFSET: ${APP_API_PORT_OFFSET:-100}
+      LABB_TLS: ${LABB_TLS:-internal}
+      LABB_DEFAULT_SNI: ${LABB_DEFAULT_SNI:-localhost}
+      SITES_HTTPS_PORT: ${SITES_HTTPS_PORT:-8301}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy/start.sh:/etc/caddy/start.sh:ro
+      # Its CA (root and key) and certificates: kept, and backed up, so devices keep trusting it
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - labb-web
+    networks: [default, apps, sites-public]
+    restart: unless-stopped
+
+  # Nightly backups (optional): docker compose --profile backup up -d. Each night at BACKUP_AT the
+  # database (as SQL), secret.key (which Studio's secrets, the providers' keys and connected
+  # apps' tokens are encrypted with) and people's apps (apps.tar.gz) go into ./backups/labb-<time>/, keeping the newest
+  # BACKUP_KEEP, and the sites (sites.tar.gz). One right now: docker compose run --rm backup --once
+  backup:
+    image: pgvector/pgvector:pg18-trixie
+    profiles: [backup]
+    entrypoint: ["/backup/backup.sh"]
+    environment:
+      PGHOST: postgres
+      PGUSER: labb
+      PGDATABASE: labb
+      PGPASSWORD: ${POSTGRES_PASSWORD:-labb}
+      BACKUP_KEEP: ${BACKUP_KEEP:-7}
+      BACKUP_AT: ${BACKUP_AT:-03:00}
+      BACKUP_OWNER: ${BACKUP_OWNER:-}
+      # An age public key: each backup encrypted with it (backup/backup.sh)
+      BACKUP_AGE_RECIPIENT: ${BACKUP_AGE_RECIPIENT:-}
+      TZ: ${TZ:-UTC}
+      # The apps' databases too (apps-db.sql.gz)
+      APPS_PGHOST: apps-postgres
+      APPS_PGPASSWORD_FILE: /apps-db/password
+    volumes:
+      - ./backup/backup.sh:/backup/backup.sh:ro
+      - ${BACKUP_DIR:-./backups}:/backups
+      - labb-data:/data:ro
+      - caddy-data:/caddy:ro
+      # People's apps: their files, settings (secrets encrypted, and the key) and data
+      - spawner-data:/spawner:ro
+      - apps-db-secret:/apps-db:ro
+      # The sites (sites.tar.gz)
+      - sites-data:/sites:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [default, apps-db]
+    restart: unless-stopped
+
+  # Speech on this machine: speaches serves OpenAI's audio API with faster-whisper (listening) and
+  # Kokoro or Piper voices (speaking). labb has it as the provider "speaches" and downloads the
+  # models it picks into it. Not published: only labb reaches it.
+  speaches:
+    image: ghcr.io/speaches-ai/speaches:0.8.3-cpu
+    volumes:
+      - speaches-models:/home/ubuntu/.cache/huggingface/hub
+    restart: unless-stopped
+
+networks:
+  # The crawler, the server and Postgres: the crawler reaches the internet, and nothing else of labb's
+  crawler:
+  sandbox:
+    internal: true
+  spawner:
+    internal: true
+  # People's apps, the server (which checks they answer) and Caddy (which passes them https). A fixed
+  # name, as the spawner puts the apps on it by name; they reach the internet, not labb's database.
+  apps:
+    name: labb-apps
+  # The spawner, the apps' Postgres and the backup only: apps can't reach the spawner through it
+  apps-db:
+    name: labb-apps-db
+    internal: true
+  browser:
+  # The sites' front, the service taking uploads and labb-web, which publishes artifacts there; the
+  # front alone is on sites-public, which publishes it (and lets labb's Caddy reach it with https)
+  sites:
+    internal: true
+  sites-public:
+
+volumes:
+  labb-data:
+  labb-cache:
+  postgres-data:
+  sandbox-token:
+  browser-data:
+  browser-token:
+  crawler-token:
+  spawner-token:
+  spawner-data:
+  apps-db-secret:
+  apps-postgres-data:
+  speaches-models:
+  caddy-data:
+  caddy-config:
+  sites-data:
+  sites-token:

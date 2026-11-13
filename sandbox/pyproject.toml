@@ -1,0 +1,29 @@
+[project]
+name = "labb-sandbox"
+version = "0.1.0"
+description = "Runs the Python steps of labb's workflows, isolated: no network, limited time and memory, a user of its own per run"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Random Encabulator" }]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.32",
+]
+
+[project.scripts]
+labb-sandbox = "labb_sandbox.app:main"
+
+[dependency-groups]
+dev = ["pytest>=8.3", "httpx>=0.28"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/labb_sandbox"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

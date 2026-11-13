@@ -1,0 +1,10 @@
+/* What every page using the components needs: the page's colours and type, focus rings, links */
+.lb-root {
+  background: var(--lb-sys-color-bg);
+  color: var(--lb-sys-color-text);
+  font: var(--lb-text-base)/var(--lb-leading-base) var(--lb-font-sans);
+}
+.lb-root :focus-visible { outline: var(--lb-border-focus) solid var(--lb-sys-color-accent); outline-offset: 2px; }
+
+/* Links: the highlighter under them on light */
+.lb-link { color: var(--lb-sys-color-accent); text-underline-offset: 3px; box-shadow: inset 0 -0.4em 0 var(--lb-sys-color-link-mark); }

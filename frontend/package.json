@@ -1,0 +1,23 @@
+{
+  "name": "labb-js",
+  "private": true,
+  "description": "The JavaScript side of the labb repository as one npm workspace: the web app and the design system.",
+  "workspaces": [
+    "web",
+    "design-system/packages/*",
+    "design-system/docs"
+  ],
+  "scripts": {
+    "web:dev": "npm run dev -w web",
+    "web:build": "npm run build -w web",
+    "web:typecheck": "npm run typecheck -w web",
+    "tokens": "npm run build -w @labb/tokens",
+    "tokens:watch": "npm run watch -w @labb/tokens",
+    "skill": "npm run skill -w @labb/design-docs",
+    "docs:dev": "npm run tokens && npm run skill && npm run dev -w @labb/design-docs",
+    "docs:build": "npm run tokens && npm run skill && npm run build -w @labb/design-docs",
+    "docs:preview": "npm run preview -w @labb/design-docs",
+    "design:typecheck": "npm run check -w @labb/tokens && npm run skill -w @labb/design-docs -- --check && npm run typecheck -w @labb/design-docs",
+    "typecheck": "npm run design:typecheck && npm run web:typecheck"
+  }
+}
